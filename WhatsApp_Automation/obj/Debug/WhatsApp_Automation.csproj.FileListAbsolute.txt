@@ -10,10 +10,11 @@ D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\bin\Debug\Exce
 D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\bin\Debug\ExcelDataReader.DataSet.xml
 D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\bin\Debug\WebDriver.xml
 D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\obj\Debug\WhatsApp_Automation.csprojAssemblyReference.cache
-D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\obj\Debug\WhatsAppAutomation.FrmMain.resources
 D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\obj\Debug\WhatsApp_Automation.Properties.Resources.resources
 D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\obj\Debug\WhatsApp_Automation.csproj.GenerateResource.cache
 D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\obj\Debug\WhatsApp_Automation.csproj.CoreCompileInputs.cache
 D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\obj\Debug\WhatsApp_Automation.csproj.CopyComplete
 D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\obj\Debug\WhatsApp_Automation.exe
 D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\obj\Debug\WhatsApp_Automation.pdb
+D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\obj\Debug\WhatsApp_Automation.FrmMain.resources
+D:\Software\Programming\c#\WhatsAppAutomation\WhatsApp_Automation\bin\Debug\WhatsApp_Automation.exe.config

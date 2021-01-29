@@ -1,4 +1,4 @@
-﻿namespace WhatsAppAutomation
+﻿namespace WhatsApp_Automation
 {
     partial class FrmMain
     {
@@ -40,11 +40,11 @@
             this.btnSend = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnGetPath = new System.Windows.Forms.Button();
-            this.txtPath = new System.Windows.Forms.TextBox();
-            this.btnCopyPath = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.btnClear = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnCopyPath = new System.Windows.Forms.Button();
+            this.txtPath = new System.Windows.Forms.TextBox();
+            this.btnGetPath = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -177,24 +177,27 @@
             this.panel2.Size = new System.Drawing.Size(455, 358);
             this.panel2.TabIndex = 8;
             // 
-            // btnGetPath
+            // btnClear
             // 
-            this.btnGetPath.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGetPath.Location = new System.Drawing.Point(384, 107);
-            this.btnGetPath.Name = "btnGetPath";
-            this.btnGetPath.Size = new System.Drawing.Size(55, 26);
-            this.btnGetPath.TabIndex = 0;
-            this.btnGetPath.Text = "...";
-            this.btnGetPath.UseVisualStyleBackColor = true;
-            this.btnGetPath.Click += new System.EventHandler(this.btnGetPath_Click);
+            this.btnClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.btnClear.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClear.Location = new System.Drawing.Point(223, 154);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(96, 44);
+            this.btnClear.TabIndex = 4;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // txtPath
+            // label3
             // 
-            this.txtPath.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold);
-            this.txtPath.Location = new System.Drawing.Point(11, 107);
-            this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(358, 28);
-            this.txtPath.TabIndex = 1;
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(7, 69);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(135, 23);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Identify Path";
             // 
             // btnCopyPath
             // 
@@ -208,37 +211,36 @@
             this.btnCopyPath.UseVisualStyleBackColor = false;
             this.btnCopyPath.Click += new System.EventHandler(this.btnCopyPath_Click);
             // 
-            // label3
+            // txtPath
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(7, 69);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(135, 23);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Identify Path";
+            this.txtPath.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold);
+            this.txtPath.Location = new System.Drawing.Point(11, 107);
+            this.txtPath.Name = "txtPath";
+            this.txtPath.Size = new System.Drawing.Size(358, 28);
+            this.txtPath.TabIndex = 1;
             // 
-            // btnClear
+            // btnGetPath
             // 
-            this.btnClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.btnClear.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClear.Location = new System.Drawing.Point(223, 154);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(96, 44);
-            this.btnClear.TabIndex = 4;
-            this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = false;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnGetPath.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGetPath.Location = new System.Drawing.Point(384, 107);
+            this.btnGetPath.Name = "btnGetPath";
+            this.btnGetPath.Size = new System.Drawing.Size(55, 26);
+            this.btnGetPath.TabIndex = 0;
+            this.btnGetPath.Text = "...";
+            this.btnGetPath.UseVisualStyleBackColor = true;
+            this.btnGetPath.Click += new System.EventHandler(this.btnGetPath_Click);
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1210, 441);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(1228, 488);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1228, 488);
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Automate Sending Message";

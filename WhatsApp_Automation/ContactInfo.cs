@@ -1,6 +1,6 @@
-﻿namespace WhatsAppAutomation
+﻿namespace WhatsApp_Automation
 {
-    struct ContactInfo
+    internal struct ContactInfo
     {
         public string ContactName { get; set; }
         public string MsgTxt { get; set; }

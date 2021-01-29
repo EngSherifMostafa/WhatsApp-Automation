@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Windows;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System.Threading;
 
-namespace WhatsAppAutomation
+namespace WhatsApp_Automation
 {
-    class SendMessage
+    internal class SendMessage
     {
         private int _contactNum;
         private readonly ChromeDriver _webDriver = new ChromeDriver();
 
-        public void Send(List<ContactInfo> contactLst, ref System.Windows.Forms.Label lblCounter)
+        public void Send(ref List<ContactInfo> contactLst, ref System.Windows.Forms.Label lblCounter,ref StreamWriter logFile)
         {
             //general waiting time for each searching for element 
-            _webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            _webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
             //open WhatsApp web
             _webDriver.Navigate().GoToUrl("https://web.whatsapp.com/");
@@ -36,25 +37,39 @@ namespace WhatsAppAutomation
 
             catch (Exception)
             {
+                var verifyContact = false;
+                var verifyPhoto = false;
+
                 foreach (var info in contactLst)
                 {
-                    if (info.ContactName == "" || info.MsgTxt == "")
-                        continue;
-                    SendMsgByContact(info.ContactName, info.MsgTxt);
+                    if (info.ContactName != "" && info.MsgTxt != "")
+                    {
+                        verifyContact = SendMsgByContact(info.ContactName, info.MsgTxt);
+                        if(!verifyContact)
+                            logFile.WriteLine(info.ContactName);
+                    }
 
-                    if (info.PhotoPath == "")
-                        continue;
-                    SendPhotoByContact(info.PhotoPath, info.PhotoDesc);
+                    if (verifyContact && info.PhotoPath != "")
+                    {
+                        verifyPhoto = SendPhotoByContact(info.PhotoPath, info.PhotoDesc);
+                    }
 
-                    lblCounter.Text = _contactNum + @" From " + contactLst.Count;
+                    if (verifyContact) lblCounter.Text = ++_contactNum + @" From " + contactLst.Count;
                 }
             }
         }
 
 
         //method to send message by each person
-        private void SendMsgByContact(string contactName, string msg)
+        private bool SendMsgByContact(string contactName, string msg)
         {
+            //refresh page and check connection before start
+            if (!RefreshPage())
+            {
+                MessageBox.Show("Error in internet connection", "Connection error");
+                return false;
+            }
+
             try
             {
                 //search for name
@@ -65,25 +80,34 @@ namespace WhatsAppAutomation
                 txtSearch.SendKeys(Keys.Enter);
 
                 //write message
-                var txtMsgBox = _webDriver.FindElement(By.XPath("//*[@id=\"main\"]/footer/div[1]/div[2]/div/div[2]"));
+                var txtMsgBox =
+                    _webDriver.FindElement(By.XPath("//*[@id=\"main\"]/footer/div[1]/div[2]/div/div[2]"));
                 txtMsgBox.SendKeys(msg);
                 //press Enter
                 txtMsgBox.SendKeys(Keys.Enter);
 
-                //increase contact_num
-                _contactNum++;
+                return true;
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
+                //empty search box if contact not found
+                _webDriver.FindElement(By.XPath("/html/body/div[1]/div/div/div[3]/div/div[1]/div/span/button/span"))
+                    .Click();
+                return false;
             }
         }
 
-
         //method send photos
-        private void SendPhotoByContact(string photoPath, string photoDesc)
+        private bool SendPhotoByContact(string photoPath, string photoDesc)
         {
+            //check photo path
+            if (!File.Exists(photoPath))
+            {
+                RefreshPage();
+                return false;
+            }
+
             try
             {
                 //open menu of sending types
@@ -110,11 +134,17 @@ namespace WhatsAppAutomation
                         By.XPath(
                             "//*[@id=\"app\"]/div/div/div[2]/div[2]/span/div/span/div/div/div[2]/span/div/div/span"))
                     .Click();
+
+                //wait till photo sent
+                Thread.Sleep(5000);
+
+                return true;
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e);
+                //MessageBox.Show($"The path \"{photoDesc}\" is not valid", @"Error");
+                return false;
             }
         }
 
@@ -143,17 +173,44 @@ namespace WhatsAppAutomation
                 fs.Close();
 
                 //run code file
-                Thread.Sleep(10000);
+                Thread.Sleep(5000);
                 new Process {StartInfo = new ProcessStartInfo("SendPhoto.au3") {UseShellExecute = true}}.Start();
 
                 //delete file after process complete
-                Thread.Sleep(10000);
+                Thread.Sleep(5000);
                 File.Delete("SendPhoto.au3");
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
+                MessageBox.Show(@"Error while photo sending", @"Error");
+            }
+        }
+
+        private bool RefreshPage()
+        {
+            //try to refresh page then check it 5 times { 5 , 4 , 3 , 2 , 1 }
+            var tryRefresh = 5;
+            _webDriver.Navigate().Refresh();
+            
+            refresh:
+            try
+            {
+                //verify refreshing
+                _webDriver.FindElement(By.XPath("//*[@id=\"app\"]/div/div/div[4]/div/div/div[2]"));
+                return true;
+            }
+
+            catch (Exception)
+            {
+                tryRefresh--;
+                if (tryRefresh == 0)
+                    return false;
+
+                //wait 5 sec then recheck if refresh finish
+                Thread.Sleep(3000);
+
+                goto refresh;
             }
         }
     }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
-namespace WhatsAppAutomation
+namespace WhatsApp_Automation
 {
     public partial class FrmMain : Form
     {
@@ -13,13 +14,17 @@ namespace WhatsAppAutomation
 
         public FrmMain() => InitializeComponent();
 
-        private void btnBrowse_Click(object sender, System.EventArgs e)
+        private void btnBrowse_Click(object sender, EventArgs e)
         {
             using (var ofd = new OpenFileDialog() {Filter = @"Excel Workbook|*.xlsx|Excel 97-2003 Workbook|*.xls"})
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
+                    //empty combobox of sheets name firstly
+                    cbxSheetsName.Items.Clear();
+
                     var excelSheets = AppHelper.ImportExcelFile(ofd.FileName);
+                    if (excelSheets == null) return;
 
                     //Fill text_box with file name and extension
                     txtFileName.Text = Path.GetFileName(ofd.FileName);
@@ -44,7 +49,7 @@ namespace WhatsAppAutomation
 
             else
             {
-                MessageBox.Show(@"Please select file and sheet name");
+                MessageBox.Show(@"Please select file and sheet name", @"Error");
             }
         }
 
@@ -58,25 +63,43 @@ namespace WhatsAppAutomation
                 //fill list of class members with every contact info in excel sheet
                 for (var row = 0; row < _dt.Rows.Count; row++)
                 {
-                    person.Add(new ContactInfo()
+                    try
                     {
-                        ContactName = _dt.Rows[row][0].ToString(),
-                        MsgTxt = _dt.Rows[row][1].ToString(),
-                        PhotoPath = _dt.Rows[row][2].ToString(),
-                        PhotoDesc = _dt.Rows[row][3].ToString()
-                    });
+                        person.Add(new ContactInfo()
+                        {
+                            ContactName = _dt.Rows[row][0].ToString(),
+                            MsgTxt = _dt.Rows[row][1].ToString(),
+                            PhotoPath = _dt.Rows[row][2].ToString(),
+                            PhotoDesc = _dt.Rows[row][3].ToString()
+                        });
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        MessageBox.Show(@"Use excel template sheet",@"Error");
+                        return;
+                    }
+                    
                 }
                 
+                //create log file if not exist
+                var fileName = ".\\" + "Log - " + DateTime.Now.ToString("dd-MM-yyyy - HH.mm.ss tt") + ".txt";
+                var logFile = new StreamWriter($"{fileName}", true);
+                logFile.WriteLine("DATE : " + DateTime.Now.ToString("dd-MM-yyyy - HH.mm.ss tt"));
+
+                //create object from SendMessage class
                 var objSend = new SendMessage();
-                objSend.Send(person, ref lblCounter);
-                MessageBox.Show(@"Done");
+
+                objSend.Send(ref person, ref lblCounter, ref logFile);
+                MessageBox.Show(@"Done", @"Congratulations");
+                
+                //close streaming
+                logFile.Close();
             }
             
             else
             {
-                MessageBox.Show(@"Please import excel file");
+                MessageBox.Show(@"Please import excel file", @"Error");
             }
-
         }
 
         private void btnCopyPath_Click(object sender, EventArgs e)
@@ -89,7 +112,6 @@ namespace WhatsAppAutomation
             {
                 Console.WriteLine(ex.Message);
             }
-
         }
 
         private void btnClear_Click(object sender, EventArgs e)
